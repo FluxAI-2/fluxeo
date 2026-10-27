@@ -29,7 +29,7 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       {
-        title: "OpenSEO",
+        title: "Fluxeo",
       },
       {
         charSet: "utf-8",
@@ -76,6 +76,7 @@ export const Route = createRootRoute({
         href: "/favicon-16x16.png",
       },
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+      { rel: "icon", type: "image/svg+xml", href: "/fluxeo-mark.svg" },
       { rel: "manifest", href: "/site.webmanifest" },
     ],
     scripts: [],

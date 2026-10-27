@@ -8,6 +8,7 @@ import {
 } from "@/client/layout/AppShellParts";
 import { GscReEngagementModal } from "@/client/features/gsc/GscReEngagementModal";
 import { Sidebar } from "@/client/components/Sidebar";
+import { FluxeoLogo } from "@/client/components/FluxeoLogo";
 import { BILLING_ROUTE } from "@/shared/billing";
 import { getSeoApiKeyStatus } from "@/serverFunctions/config";
 import { getLastProjectId } from "@/client/lib/active-project";
@@ -111,7 +112,8 @@ export function AuthenticatedAppLayout({
         projectPending={sidebarProjectPending}
         ready={ready}
       />
-      <SidebarInset className="min-h-0 overflow-hidden md:!m-0 md:!mt-2 md:!rounded-none md:!rounded-tl-lg md:border-l md:border-t md:border-sidebar-border md:!shadow-none">
+      {/* Content floats on the ambient canvas; only the sidebar is glass. */}
+      <SidebarInset className="min-h-0 overflow-hidden bg-transparent">
         <MobileTopBar />
         <SeoApiStatusBanners
           shouldShowSeoApiWarning={shouldShowSeoApiWarning}
@@ -139,10 +141,10 @@ export function AuthenticatedAppLayout({
 
 function MobileTopBar() {
   return (
-    <div className="flex shrink-0 items-center gap-1 border-b border-border bg-card px-2 py-1.5 md:hidden">
+    <div className="glass-thin z-10 flex shrink-0 items-center gap-1 border-b border-separator px-2 py-1.5 md:hidden">
       <SidebarTrigger aria-label="Toggle sidebar" />
-      <Link to="/" className="ml-1 font-semibold text-foreground">
-        OpenSEO
+      <Link to="/" className="ml-1">
+        <FluxeoLogo markClassName="size-6" />
       </Link>
     </div>
   );

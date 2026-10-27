@@ -241,7 +241,7 @@ function BillingPage() {
                     </div>
                     <ul className="space-y-1.5">
                       {[
-                        "Access to all OpenSEO features",
+                        "Access to all Fluxeo features",
                         monthlyCreditsFeature(BASE_PLAN_OFFER),
                       ].map((item) => (
                         <li

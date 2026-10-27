@@ -25,6 +25,7 @@ import {
   SamSidebarPanel,
 } from "@/client/features/sam/SamSidebarPanel";
 import { ThemePreferenceRadio } from "@/client/components/ThemePreferenceMenuItems";
+import { FluxeoLogo } from "@/client/components/FluxeoLogo";
 import { getStandardErrorMessage } from "@/client/lib/error-messages";
 import { signOutAndRedirect, useSession } from "@/lib/auth-client";
 import { BILLING_ROUTE } from "@/shared/billing";
@@ -52,8 +53,10 @@ import {
   DropdownMenuTrigger,
 } from "@/client/components/ui/dropdown-menu";
 
+// macOS source-list rows: a soft fill marks the selection and the icon takes
+// the accent color; unselected icons sit in the secondary label color.
 const navButtonClass =
-  "relative text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground data-active:before:absolute data-active:before:inset-y-1 data-active:before:left-0 data-active:before:w-[3px] data-active:before:rounded-r-full data-active:before:bg-primary";
+  "relative font-[450] text-sidebar-foreground/85 transition-colors duration-(--duration-fast) hover:bg-sidebar-accent/60 hover:text-sidebar-foreground [&_svg]:text-label-secondary data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground data-active:[&_svg]:text-primary";
 
 function SidebarNavLink({
   icon: Icon,
@@ -138,14 +141,14 @@ export function Sidebar({
   const onSamRoute = pathname.includes("/sam");
 
   return (
-    <UiSidebar variant="inset" collapsible="offcanvas" className="md:!p-0">
-      <SidebarHeader className="gap-0 px-3 pb-1 pt-3">
+    <UiSidebar variant="floating" collapsible="offcanvas" className="md:p-2.5">
+      <SidebarHeader className="gap-1 px-3 pb-1 pt-3.5">
         <Link
           to="/"
           onClick={() => setOpenMobile(false)}
-          className="px-1 pb-2 text-base font-semibold text-sidebar-foreground"
+          className="rounded-lg px-1 pb-2 outline-none focus-visible:ring-4 focus-visible:ring-ring/25"
         >
-          OpenSEO
+          <FluxeoLogo />
         </Link>
         <ProjectSwitcher
           activeProjectId={projectId}
@@ -173,7 +176,7 @@ export function Sidebar({
           >
             {navGroups.map((group) => (
               <SidebarGroup key={group.label} className="py-1">
-                <SidebarGroupLabel className="h-7 uppercase tracking-wider text-sidebar-foreground/40">
+                <SidebarGroupLabel className="h-7 px-2.5 text-[0.6875rem] font-semibold text-label-tertiary">
                   {group.label}
                 </SidebarGroupLabel>
                 <SidebarGroupContent>
@@ -230,7 +233,7 @@ function AccountFooter({ ready }: { ready: boolean }) {
   }
 
   return (
-    <UiSidebarFooter className="gap-0 border-t border-sidebar-border pb-safe">
+    <UiSidebarFooter className="mx-2 gap-0 border-t border-sidebar-border px-0 pb-safe">
       <SidebarMenu>
         <SidebarNavLink
           icon={CircleHelp}

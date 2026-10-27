@@ -1,0 +1,434 @@
+/* Fluxeo design tokens — Liquid Glass.
+   The full system (principles, usage, do's and don'ts) is documented in
+   docs/maintainers/design-system.md. The shadcn variables below stay the
+   source of truth for component colors; the Fluxeo tokens add the glass
+   materials, label hierarchy, type scale and motion on top of them. */
+
+@custom-variant dark (&:where([data-theme=fluxeo-dark], [data-theme=fluxeo-dark] *));
+
+@theme {
+  --container-8xl: 88rem;
+
+  /* SF Pro on Apple platforms; Inter is the closest match everywhere else. */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Inter Variable", "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono:
+    ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Apple text styles, adapted to a 14px web body. Each size carries the
+     line height and tracking SF uses at that optical size. */
+  --text-large-title: 2rem;
+  --text-large-title--line-height: 1.15;
+  --text-large-title--letter-spacing: -0.025em;
+  --text-large-title--font-weight: 700;
+  --text-title-1: 1.625rem;
+  --text-title-1--line-height: 1.2;
+  --text-title-1--letter-spacing: -0.022em;
+  --text-title-1--font-weight: 700;
+  --text-title-2: 1.375rem;
+  --text-title-2--line-height: 1.25;
+  --text-title-2--letter-spacing: -0.02em;
+  --text-title-2--font-weight: 600;
+  --text-title-3: 1.125rem;
+  --text-title-3--line-height: 1.3;
+  --text-title-3--letter-spacing: -0.015em;
+  --text-title-3--font-weight: 600;
+  --text-headline: 0.9375rem;
+  --text-headline--line-height: 1.35;
+  --text-headline--letter-spacing: -0.01em;
+  --text-headline--font-weight: 600;
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.45;
+  --text-body--letter-spacing: -0.006em;
+  --text-callout: 0.8125rem;
+  --text-callout--line-height: 1.4;
+  --text-footnote: 0.75rem;
+  --text-footnote--line-height: 1.35;
+  --text-caption: 0.6875rem;
+  --text-caption--line-height: 1.3;
+  --text-caption--letter-spacing: 0.01em;
+
+  /* Motion. "spring" is the curve Apple uses for sheets and popovers;
+     "snappy" settles faster for hover and press feedback. */
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-snappy: cubic-bezier(0.2, 0.9, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 420ms;
+
+  /* Elevation. Soft, wide, low-opacity shadows; never a hard edge. */
+  --shadow-e1: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 1px rgb(0 0 0 / 0.03);
+  --shadow-e2: 0 2px 6px rgb(0 0 0 / 0.04), 0 8px 24px rgb(0 0 0 / 0.06);
+  --shadow-e3: 0 4px 12px rgb(0 0 0 / 0.06), 0 24px 48px rgb(0 0 0 / 0.12);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Label hierarchy (Apple: label, secondaryLabel, tertiaryLabel). */
+  --color-label: var(--foreground);
+  --color-label-secondary: var(--label-secondary);
+  --color-label-tertiary: var(--label-tertiary);
+  /* Translucent fills for controls (Apple: systemFill ladder). */
+  --color-fill: var(--fill);
+  --color-fill-secondary: var(--fill-secondary);
+  --color-fill-tertiary: var(--fill-tertiary);
+  --color-separator: var(--separator);
+  --color-grouped: var(--grouped);
+
+  /* Apple system colors, tuned per theme. */
+  --color-sys-blue: var(--sys-blue);
+  --color-sys-indigo: var(--sys-indigo);
+  --color-sys-purple: var(--sys-purple);
+  --color-sys-pink: var(--sys-pink);
+  --color-sys-red: var(--sys-red);
+  --color-sys-orange: var(--sys-orange);
+  --color-sys-yellow: var(--sys-yellow);
+  --color-sys-green: var(--sys-green);
+  --color-sys-mint: var(--sys-mint);
+  --color-sys-teal: var(--sys-teal);
+  --color-sys-cyan: var(--sys-cyan);
+  --color-sys-gray: var(--sys-gray);
+
+  /* Concentric radii. Base 10px: controls 10, cards 20, panels 24.
+     Inner radius = outer radius - padding, so nested corners stay parallel. */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 2.4);
+  --radius-4xl: calc(var(--radius) * 3.2);
+}
+
+:where(:root),
+[data-theme="fluxeo"] {
+  color-scheme: light;
+  --radius: 0.625rem;
+
+  --sys-blue: #007aff;
+  --sys-indigo: #5856d6;
+  --sys-purple: #af52de;
+  --sys-pink: #ff2d55;
+  --sys-red: #ff3b30;
+  --sys-orange: #ff9500;
+  --sys-yellow: #ffcc00;
+  --sys-green: #34c759;
+  --sys-mint: #00c7be;
+  --sys-teal: #30b0c7;
+  --sys-cyan: #32ade6;
+  --sys-gray: #8e8e93;
+
+  /* Apple.com canvas gray; content sits on white cards above it. */
+  --background: #f5f5f7;
+  --foreground: #1d1d1f;
+  --label-secondary: rgb(60 60 67 / 0.64);
+  --label-tertiary: rgb(60 60 67 / 0.38);
+  --fill: rgb(120 120 128 / 0.2);
+  --fill-secondary: rgb(120 120 128 / 0.14);
+  --fill-tertiary: rgb(118 118 128 / 0.1);
+  --separator: rgb(60 60 67 / 0.14);
+  --grouped: #f2f2f7;
+
+  --card: #ffffff;
+  --card-foreground: #1d1d1f;
+  --popover: #ffffff;
+  --popover-foreground: #1d1d1f;
+  --primary: var(--sys-blue);
+  --primary-foreground: #ffffff;
+  --secondary: rgb(120 120 128 / 0.12);
+  --secondary-foreground: #1d1d1f;
+  --muted: rgb(118 118 128 / 0.08);
+  --muted-foreground: rgb(60 60 67 / 0.64);
+  --accent: rgb(120 120 128 / 0.12);
+  --accent-foreground: #1d1d1f;
+  --destructive: var(--sys-red);
+  --success: #248a3d;
+  --success-foreground: #ffffff;
+  --warning: var(--sys-orange);
+  --warning-foreground: #5c3800;
+  --info: var(--sys-cyan);
+  --info-foreground: #ffffff;
+  --border: rgb(60 60 67 / 0.12);
+  --input: rgb(60 60 67 / 0.2);
+  --ring: var(--sys-blue);
+  --chart-1: var(--sys-blue);
+  --chart-2: var(--sys-orange);
+  --chart-3: var(--sys-green);
+  --chart-4: var(--sys-purple);
+  --chart-5: var(--sys-pink);
+
+  --sidebar: rgb(246 246 248 / 0.62);
+  --sidebar-foreground: #1d1d1f;
+  --sidebar-primary: var(--sys-blue);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgb(0 0 0 / 0.06);
+  --sidebar-accent-foreground: #1d1d1f;
+  --sidebar-border: rgb(0 0 0 / 0.08);
+  --sidebar-ring: var(--sys-blue);
+
+  /* Liquid Glass materials. "regular" for chrome (sidebar, toolbars),
+     "thick" for floating surfaces that hold text (menus, popovers). */
+  --glass-regular: rgb(255 255 255 / 0.56);
+  --glass-thick: rgb(255 255 255 / 0.78);
+  --glass-thin: rgb(255 255 255 / 0.36);
+  --glass-stroke: rgb(255 255 255 / 0.7);
+  --glass-edge: rgb(0 0 0 / 0.07);
+  --glass-highlight:
+    inset 0 1px 0 rgb(255 255 255 / 0.85),
+    inset 0 -1px 0 rgb(255 255 255 / 0.25);
+  --glass-shadow: 0 1px 1px rgb(0 0 0 / 0.03), 0 8px 28px rgb(0 0 0 / 0.08);
+  --glass-blur: 28px;
+  --glass-saturate: 180%;
+
+  /* Ambient light behind the glass, so the material has something to
+     refract. Very low chroma; it is felt, not seen. */
+  --ambient-1: rgb(0 122 255 / 0.1);
+  --ambient-2: rgb(175 82 222 / 0.08);
+  --ambient-3: rgb(48 176 199 / 0.08);
+
+  /* The Fluxeo AI accent: used only to mark generative-engine features. */
+  --ai-gradient: linear-gradient(
+    120deg,
+    #007aff 0%,
+    #5856d6 35%,
+    #af52de 65%,
+    #ff2d55 100%
+  );
+}
+
+[data-theme="fluxeo-dark"] {
+  color-scheme: dark;
+
+  --sys-blue: #0a84ff;
+  --sys-indigo: #5e5ce6;
+  --sys-purple: #bf5af2;
+  --sys-pink: #ff375f;
+  --sys-red: #ff453a;
+  --sys-orange: #ff9f0a;
+  --sys-yellow: #ffd60a;
+  --sys-green: #30d158;
+  --sys-mint: #63e6e2;
+  --sys-teal: #40c8e0;
+  --sys-cyan: #64d2ff;
+  --sys-gray: #98989d;
+
+  --background: #000000;
+  --foreground: #f5f5f7;
+  --label-secondary: rgb(235 235 245 / 0.64);
+  --label-tertiary: rgb(235 235 245 / 0.34);
+  --fill: rgb(120 120 128 / 0.36);
+  --fill-secondary: rgb(120 120 128 / 0.32);
+  --fill-tertiary: rgb(118 118 128 / 0.24);
+  --separator: rgb(84 84 88 / 0.6);
+  --grouped: #000000;
+
+  --card: #1c1c1e;
+  --card-foreground: #f5f5f7;
+  --popover: #2c2c2e;
+  --popover-foreground: #f5f5f7;
+  --primary: var(--sys-blue);
+  --primary-foreground: #ffffff;
+  --secondary: rgb(120 120 128 / 0.24);
+  --secondary-foreground: #f5f5f7;
+  --muted: rgb(118 118 128 / 0.18);
+  --muted-foreground: rgb(235 235 245 / 0.62);
+  --accent: rgb(120 120 128 / 0.24);
+  --accent-foreground: #f5f5f7;
+  --destructive: var(--sys-red);
+  --success: var(--sys-green);
+  --success-foreground: #00210a;
+  --warning: var(--sys-orange);
+  --warning-foreground: #2b1a00;
+  --info: var(--sys-cyan);
+  --info-foreground: #00202e;
+  --border: rgb(255 255 255 / 0.09);
+  --input: rgb(255 255 255 / 0.16);
+  --ring: var(--sys-blue);
+  --chart-1: var(--sys-blue);
+  --chart-2: var(--sys-orange);
+  --chart-3: var(--sys-green);
+  --chart-4: var(--sys-purple);
+  --chart-5: var(--sys-pink);
+
+  --sidebar: rgb(30 30 32 / 0.58);
+  --sidebar-foreground: #f5f5f7;
+  --sidebar-primary: var(--sys-blue);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgb(255 255 255 / 0.08);
+  --sidebar-accent-foreground: #f5f5f7;
+  --sidebar-border: rgb(255 255 255 / 0.08);
+  --sidebar-ring: var(--sys-blue);
+
+  --glass-regular: rgb(36 36 40 / 0.52);
+  --glass-thick: rgb(44 44 48 / 0.78);
+  --glass-thin: rgb(36 36 40 / 0.32);
+  --glass-stroke: rgb(255 255 255 / 0.12);
+  --glass-edge: rgb(0 0 0 / 0.5);
+  --glass-highlight:
+    inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 -1px 0 rgb(255 255 255 / 0.03);
+  --glass-shadow: 0 1px 1px rgb(0 0 0 / 0.3), 0 12px 36px rgb(0 0 0 / 0.45);
+
+  --ambient-1: rgb(10 132 255 / 0.16);
+  --ambient-2: rgb(191 90 242 / 0.12);
+  --ambient-3: rgb(64 200 224 / 0.08);
+
+  --shadow-e1: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-e2: 0 2px 8px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.3);
+  --shadow-e3: 0 4px 16px rgb(0 0 0 / 0.5), 0 24px 56px rgb(0 0 0 / 0.5);
+}
+
+:root {
+  --trend-grid-color: rgb(60 60 67 / 0.14);
+  --trend-axis-color: rgb(60 60 67 / 0.6);
+  --trend-fill-start-opacity: 0.28;
+  --trend-fill-end-opacity: 0.02;
+  --trend-tooltip-bg: var(--glass-thick);
+  --trend-tooltip-border: var(--glass-stroke);
+  --trend-tooltip-shadow: rgb(0 0 0 / 0.1);
+}
+
+/* ---------------------------------------------------------------------------
+   Materials
+   --------------------------------------------------------------------------- */
+
+/* Liquid Glass. Chrome only: the sidebar, toolbars, menus, popovers, the
+   floating action bar. Never under body text in a content area. */
+@utility glass {
+  background-color: var(--glass-regular);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur))
+    saturate(var(--glass-saturate));
+  box-shadow:
+    var(--glass-highlight),
+    0 0 0 0.5px var(--glass-edge),
+    var(--glass-shadow);
+}
+
+@utility glass-thick {
+  background-color: var(--glass-thick);
+  backdrop-filter: blur(calc(var(--glass-blur) + 12px))
+    saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 12px))
+    saturate(var(--glass-saturate));
+  box-shadow:
+    var(--glass-highlight),
+    0 0 0 0.5px var(--glass-edge),
+    var(--shadow-e3);
+}
+
+@utility glass-thin {
+  background-color: var(--glass-thin);
+  backdrop-filter: blur(18px) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(18px) saturate(var(--glass-saturate));
+}
+
+/* Solid content surface: the card. Hairline edge plus the softest lift. */
+@utility surface {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  box-shadow:
+    0 0 0 0.5px var(--border),
+    var(--shadow-e1);
+}
+
+/* Gradient text and fills for AI / generative-engine features only. */
+@utility text-ai {
+  background-image: var(--ai-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility bg-ai {
+  background-image: var(--ai-gradient);
+}
+
+/* Press feedback: controls shrink slightly, as on iOS. */
+@utility pressable {
+  transition:
+    transform var(--duration-fast) var(--ease-snappy),
+    background-color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease,
+    opacity var(--duration-fast) ease;
+  &:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: scale(0.97);
+  }
+}
+
+/* The app canvas: the gray base with the ambient light the glass picks up. */
+@utility app-canvas {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(60rem 40rem at 0% 0%, var(--ambient-1), transparent 60%),
+    radial-gradient(50rem 36rem at 100% 0%, var(--ambient-2), transparent 60%),
+    radial-gradient(40rem 30rem at 50% 110%, var(--ambient-3), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* Glass falls back to a near-opaque fill where blur is unsupported or the
+   user asked for less transparency. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-regular: var(--card);
+    --glass-thick: var(--popover);
+    --glass-thin: var(--card);
+    --sidebar: var(--card);
+  }
+}
+
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  :root {
+    --glass-regular: var(--card);
+    --glass-thick: var(--popover);
+    --glass-thin: var(--card);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}

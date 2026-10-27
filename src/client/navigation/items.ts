@@ -9,7 +9,9 @@ import {
   LayoutDashboard,
   Link2,
   MessageSquare,
+  PieChart,
   Search,
+  Sparkles,
   TrendingUp,
 } from "lucide-react";
 import { linkOptions } from "@tanstack/react-router";
@@ -76,6 +78,16 @@ const projectNavItems = [
     icon: MessageSquare,
   },
   {
+    to: "/p/$projectId/geo-readiness" as const,
+    label: "GEO Readiness",
+    icon: Sparkles,
+  },
+  {
+    to: "/p/$projectId/brand-lookup" as const,
+    label: "Share of Voice",
+    icon: PieChart,
+  },
+  {
     to: "/p/$projectId/reports" as const,
     label: "Reports",
     icon: FileText,
@@ -112,8 +124,9 @@ function getProjectNavItems(projectId: string) {
   );
 }
 
-// Grouped by scope: "My Site" is the project's own domain (tracked data),
-// "Research" is point-at-anything lookup tools.
+// Grouped by scope, generative engines first: "Generative Engines" is GEO (AI
+// answers), "Search" is classic SEO lookup tools, "My Site" is the project's
+// own tracked data.
 export function getProjectNavGroups(projectId: string) {
   const all = getProjectNavItems(projectId);
   const byPath = (path: (typeof projectNavItems)[number]["to"]) =>
@@ -125,19 +138,21 @@ export function getProjectNavGroups(projectId: string) {
       items: [byPath("/p/$projectId")],
     },
     {
-      label: "Research",
+      label: "Generative Engines",
+      items: [
+        byPath("/p/$projectId/geo-readiness"),
+        byPath("/p/$projectId/ai-visibility"),
+        byPath("/p/$projectId/brand-lookup"),
+        byPath("/p/$projectId/prompt-explorer"),
+        byPath("/p/$projectId/ai-visibility/research"),
+      ],
+    },
+    {
+      label: "Search",
       items: [
         byPath("/p/$projectId/keywords"),
         byPath("/p/$projectId/domain"),
         byPath("/p/$projectId/backlinks"),
-      ],
-    },
-    {
-      label: "AI Visibility",
-      items: [
-        byPath("/p/$projectId/ai-visibility/research"),
-        byPath("/p/$projectId/prompt-explorer"),
-        byPath("/p/$projectId/ai-visibility"),
       ],
     },
     {

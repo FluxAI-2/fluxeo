@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A84FF"/>
+      <stop offset="0.45" stop-color="#5E5CE6"/>
+      <stop offset="0.8" stop-color="#BF5AF2"/>
+      <stop offset="1" stop-color="#FF375F"/>
+    </linearGradient>
+    <linearGradient id="s" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 0c19.2 0 25.6 0 28.8 3.2C64 6.4 64 12.8 64 32s0 25.6-3.2 28.8C57.6 64 51.2 64 32 64S6.4 64 3.2 60.8C0 57.6 0 51.2 0 32S0 6.4 3.2 3.2C6.4 0 12.8 0 32 0Z" fill="url(#g)"/>
+  <path d="M32 0c19.2 0 25.6 0 28.8 3.2C64 6.4 64 12.8 64 32s0 25.6-3.2 28.8C57.6 64 51.2 64 32 64S6.4 64 3.2 60.8C0 57.6 0 51.2 0 32S0 6.4 3.2 3.2C6.4 0 12.8 0 32 0Z" fill="url(#s)"/>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="5.5">
+    <path d="M18 19.5c5-3.2 10.5-3.2 15.5 0s10.5 3.2 12.5 1.6"/>
+    <path d="M18 32c4-2.6 8.5-2.6 12.5 0s7.5 2.6 9.5 1.2"/>
+    <path d="M18 32v13"/>
+  </g>
+</svg>

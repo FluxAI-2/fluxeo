@@ -10,10 +10,7 @@ function TableCard({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="table-card"
-      className={cn(
-        "overflow-hidden rounded-xl border border-border bg-card",
-        className,
-      )}
+      className={cn("overflow-hidden rounded-2xl surface", className)}
       {...props}
     />
   );

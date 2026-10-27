@@ -13,9 +13,9 @@ export const UNEXPECTED_ERROR_MESSAGE = isHostedClientAuthMode()
 const STANDARD_MESSAGES: Record<ErrorCode, string> = {
   UNAUTHENTICATED: "Please sign in and try again.",
   AUTH_CONFIG_MISSING:
-    "OpenSEO auth is not configured. Follow the README setup steps for Cloudflare Access.",
+    "Fluxeo auth is not configured. Follow the README setup steps for Cloudflare Access.",
   PAYMENT_REQUIRED:
-    "An active hosted subscription is required before you can use OpenSEO.",
+    "An active hosted subscription is required before you can use Fluxeo.",
   INSUFFICIENT_CREDITS:
     "You don't have enough credits for this. Upgrade your plan or buy more credits to keep going.",
   AUDIT_RENDERING_UNAVAILABLE:
