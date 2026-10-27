@@ -115,16 +115,16 @@ vi.mock("@/server/lib/dataforseo/backlinks", () => ({
   fetchBacklinksHistory: vi.fn(),
   BACKLINKS_DEFAULT_LIMIT: 100,
 }));
-vi.mock("@/server/lib/dataforseo/lighthouse", () => ({
-  fetchLighthouseResult: vi.fn(),
-}));
 vi.mock("@/server/lib/dataforseo/ai", () => ({
   fetchLlmMentionsSearch: vi.fn(),
   fetchLlmAggregatedMetrics: vi.fn(),
   fetchLlmTopPages: vi.fn(),
   fetchLlmCrossAggregatedMetrics: vi.fn(),
-  fetchLlmResponse: vi.fn(),
   resolveLlmMentionsLimit: (limit?: number) => limit ?? 100,
+}));
+vi.mock("@/server/lib/llmResponses", () => ({
+  fetchLlmResponse: vi.fn(),
+  llmResponseUsd: () => 0.1,
   LLM_RESPONSE_WEB_SEARCH_DEFAULT: true,
 }));
 
@@ -422,6 +422,7 @@ describe("mapDataforseoPathToCreditFeature", () => {
     ["v3/ai_optimization/claude/llm_responses/live", "ai_prompt_responses"],
     ["v3/ai_optimization/gemini/llm_responses/live", "ai_prompt_responses"],
     ["v3/ai_optimization/perplexity/llm_responses/live", "ai_prompt_responses"],
+    ["openrouter/claude/llm_responses", "ai_prompt_responses"],
     ["v3/business_data/business_listings/search/live", "local_seo"],
     ["v3/serp/google/local_finder/live/advanced", "local_seo"],
     ["v3/serp/google/maps/live/advanced", "local_seo"],

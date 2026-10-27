@@ -1,7 +1,7 @@
 import { waitUntil } from "cloudflare:workers";
 import type { BillingCustomerContext } from "@/server/billing/subscription";
 import { createDataforseoClient } from "@/server/lib/dataforseo";
-import { resolveLatestLlmModelName } from "@/server/lib/dataforseo/llm-models";
+import { resolveLatestLlmModelName } from "@/server/lib/llmResponseModels";
 import type { LlmResponseResult } from "@/server/lib/dataforseoLlmSchemas";
 import { AppError } from "@/server/lib/errors";
 import { assertPaidAiSearchPlan } from "./access";

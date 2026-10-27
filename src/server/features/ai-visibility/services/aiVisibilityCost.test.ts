@@ -36,6 +36,6 @@ describe("AI collection estimates", () => {
     for (const mode of ["queued", "live"] as const)
       expect(
         aiCostForAnswers(["claude", "perplexity"], false, mode).providerCostUsd,
-      ).toBe(0.22);
+      ).toBe(0.26);
   });
 });

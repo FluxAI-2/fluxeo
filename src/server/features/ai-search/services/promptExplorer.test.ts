@@ -10,7 +10,7 @@ const { llmResponse } = vi.hoisted(() => ({ llmResponse: vi.fn() }));
 vi.mock("@/server/lib/dataforseo", () => ({
   createDataforseoClient: () => ({ aiSearch: { llmResponse } }),
 }));
-vi.mock("@/server/lib/dataforseo/llm-models", () => ({
+vi.mock("@/server/lib/llmResponseModels", () => ({
   resolveLatestLlmModelName: vi.fn(async () => "gpt-5.5"),
 }));
 vi.mock("@/server/lib/r2-cache", () => ({

@@ -56,7 +56,8 @@ const storedLighthouseIssueSchema = z.object({
 
 export const storedLighthousePayloadSchema = z.object({
   version: z.literal(2),
-  source: z.literal("dataforseo-lighthouse"),
+  // Reports stored before the move to PageSpeed Insights keep their source.
+  source: z.enum(["dataforseo-lighthouse", "pagespeed-insights"]),
   hasIssueDetails: z.boolean(),
   metadata: z.object({
     requestedUrl: z.string(),

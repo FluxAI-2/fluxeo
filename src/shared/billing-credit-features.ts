@@ -26,9 +26,11 @@ const CREDIT_FEATURE_LABELS: Record<string, string> = {
 };
 
 /**
- * Maps a DataForSEO API response path (e.g. ["v3", "dataforseo_labs", "google", "related_keywords", "live"])
- * to a product feature for analytics. path[1] is the API module; for dataforseo_labs,
- * path[3] distinguishes keyword vs domain endpoints.
+ * Maps a metered provider path to a product feature for analytics. For a
+ * DataForSEO path (e.g. ["v3", "dataforseo_labs", "google", "related_keywords", "live"])
+ * path[1] is the API module; for dataforseo_labs, path[3] distinguishes
+ * keyword vs domain endpoints. OpenRouter answers billed through the same seam
+ * use ["openrouter", <model slug>, "llm_responses"].
  */
 export function mapDataforseoPathToCreditFeature(
   path: readonly string[],
@@ -53,6 +55,8 @@ export function mapDataforseoPathToCreditFeature(
       // perplexity).
       if (normalizedPath[2] === "llm_mentions") return "ai_citations";
       if (normalizedPath[2] === "ai_keyword_data") return "keyword_research";
+      return "ai_prompt_responses";
+    case "openrouter":
       return "ai_prompt_responses";
     case "business_data":
       return "local_seo";

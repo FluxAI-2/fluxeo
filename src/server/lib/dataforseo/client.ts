@@ -51,14 +51,13 @@ import {
   postLocalSerpTasks,
   postRankCheckTasks,
 } from "@/server/lib/dataforseo/serp";
-import { fetchLighthouseResult } from "@/server/lib/dataforseo/lighthouse";
 import {
   fetchLlmAggregatedMetrics,
   fetchLlmCrossAggregatedMetrics,
   fetchLlmMentionsSearch,
-  fetchLlmResponse,
   fetchLlmTopPages,
 } from "@/server/lib/dataforseo/ai";
+import { fetchLlmResponse } from "@/server/lib/llmResponses";
 import {
   fetchAiTrackingLiveAnswer,
   postAiTrackingTasks,
@@ -258,13 +257,6 @@ export function createDataforseoClient(customer: BillingCustomerContext) {
         dataforseoPricing.labs.serpCompetitors,
       ),
     },
-    lighthouse: {
-      live: meter(
-        customer,
-        fetchLighthouseResult,
-        dataforseoPricing.lighthouse.live,
-      ),
-    },
     aiSearch: {
       mentionsSearch: meter(
         customer,
@@ -286,6 +278,8 @@ export function createDataforseoClient(customer: BillingCustomerContext) {
         fetchLlmCrossAggregatedMetrics,
         dataforseoPricing.aiSearch.crossAggregatedMetrics,
       ),
+      // Answers come from OpenRouter; they share this credit seam so one
+      // hold and settle covers every paid AI Search call.
       llmResponse: meter(
         customer,
         fetchLlmResponse,

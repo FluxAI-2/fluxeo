@@ -95,7 +95,6 @@ export async function runAuditPhases(
   await runLighthousePhase(step, {
     auditId,
     workflowInstanceId,
-    billingCustomer,
     projectId,
     startUrl,
     config,
@@ -177,7 +176,6 @@ async function runDiscoveryPhase(
 type LighthousePhaseParams = {
   auditId: string;
   workflowInstanceId: string;
-  billingCustomer: BillingCustomerContext;
   projectId: string;
   startUrl: string;
   config: AuditConfig;
@@ -187,14 +185,7 @@ export async function runLighthousePhase(
   step: WorkflowStep,
   params: LighthousePhaseParams,
 ) {
-  const {
-    auditId,
-    workflowInstanceId,
-    billingCustomer,
-    projectId,
-    startUrl,
-    config,
-  } = params;
+  const { auditId, workflowInstanceId, projectId, startUrl, config } = params;
   if (config.lighthouseStrategy === "none") return;
 
   const lighthouseWork = await selectLighthousePages({
@@ -217,11 +208,11 @@ export async function runLighthousePhase(
       chunkStart + LIGHTHOUSE_URL_CONCURRENCY,
     );
 
-    // The paid calls are checkpointed separately from all storage. With
-    // Workflow retries disabled, a later R2/DB/progress failure cannot replay
-    // DataForSEO. One URL groups its mobile + desktop checks into one compact
+    // The slow Lighthouse runs are checkpointed separately from all storage.
+    // With Workflow retries disabled, a later R2/DB/progress failure cannot
+    // replay them. One URL groups its mobile + desktop checks into one compact
     // checkpoint. allSettled, not all: a rejected step must not orphan the
-    // sibling paid calls mid-flight — their checkpoints complete and persist
+    // sibling runs mid-flight — their checkpoints complete and persist
     // below either way.
     const settled = await Promise.allSettled(
       chunk.map(({ url, pageId }, chunkOffset) =>
@@ -231,8 +222,8 @@ export async function runLighthousePhase(
           LIGHTHOUSE_FETCH_STEP,
           () =>
             Promise.all([
-              fetchLighthouseResult(url, pageId, "mobile", billingCustomer),
-              fetchLighthouseResult(url, pageId, "desktop", billingCustomer),
+              fetchLighthouseResult(url, pageId, "mobile"),
+              fetchLighthouseResult(url, pageId, "desktop"),
             ]),
         ),
       ),

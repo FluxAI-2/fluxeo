@@ -118,7 +118,7 @@ export function PromptExplorerPage({
     queryKey: buildPromptExplorerQueryKey(projectId, urlState),
     queryFn: () => promptExplorerQueryFn(projectId, urlState),
     // Client-side gate is a UX optimization only; the paywall is enforced
-    // in the shared service before any DataForSEO spend,
+    // in the shared service before any OpenRouter spend,
     // so a stale free-plan window here just yields a rejected request, not cost.
     enabled: hasActivePrompt && planStatus === "paid",
     staleTime: PROMPT_EXPLORER_STALE_TIME_MS,
