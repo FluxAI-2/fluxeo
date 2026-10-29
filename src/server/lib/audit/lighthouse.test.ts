@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
-const createDataforseoClientMock = vi.hoisted(() => vi.fn());
+const fetchPagespeedLighthouseMock = vi.hoisted(() => vi.fn());
 
-vi.mock("@/server/lib/dataforseo", () => ({
-  createDataforseoClient: createDataforseoClientMock,
+vi.mock("@/server/lib/pagespeedLighthouse", () => ({
+  fetchPagespeedLighthouse: fetchPagespeedLighthouseMock,
 }));
 
 vi.mock("@/server/lib/r2", () => ({
@@ -82,42 +82,22 @@ describe("selectLighthouseSample", () => {
 });
 
 describe("fetchLighthouseResult", () => {
-  const billingCustomer = {
-    userId: "user-1",
-    userEmail: "test@example.com",
-    organizationId: "org-1",
-  };
-
-  it("does not retry an ambiguous generic failure", async () => {
-    const live = vi
-      .fn()
-      .mockRejectedValueOnce(new Error("temporary failure"))
-      .mockResolvedValueOnce({
-        scores: {
-          performance: 90,
-          accessibility: 91,
-          "best-practices": 92,
-          seo: 93,
-        },
-        metrics: {
-          largestContentfulPaint: { numericValue: 1000 },
-          cumulativeLayoutShift: { numericValue: 0.01 },
-          interactionToNextPaint: { numericValue: 100 },
-          serverResponseTime: { numericValue: 200 },
-        },
-      });
-    createDataforseoClientMock.mockReturnValue({
-      lighthouse: { live },
-    });
+  // The audit workflow relies on provider failures never rejecting: they
+  // land on the audit row instead.
+  it("turns a failed check into an error row", async () => {
+    fetchPagespeedLighthouseMock.mockRejectedValue(
+      new Error("Lighthouse returned error: NO_FCP."),
+    );
 
     const fetched = await fetchLighthouseResult(
       "https://example.com/",
       "page-1",
       "desktop",
-      billingCustomer,
     );
 
-    expect(live).toHaveBeenCalledOnce();
-    expect(fetched.result.errorMessage).toBe("temporary failure");
+    expect(fetchPagespeedLighthouseMock).toHaveBeenCalledOnce();
+    expect(fetched.result.errorMessage).toBe(
+      "Lighthouse returned error: NO_FCP.",
+    );
   });
 });

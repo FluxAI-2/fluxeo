@@ -8,7 +8,7 @@ const emptyVariants = cva(
       variant: {
         plain: "",
         dashed: "border border-dashed border-border",
-        card: "border border-solid border-border bg-card text-card-foreground shadow-sm",
+        card: "surface rounded-2xl text-card-foreground",
       },
       size: {
         default: "",
@@ -55,7 +55,7 @@ const emptyMediaVariants = cva(
     variants: {
       variant: {
         default: "bg-transparent",
-        icon: "flex size-10 shrink-0 items-center justify-center rounded-lg bg-foreground/5 text-muted-foreground [&_svg:not([class*='size-'])]:size-5",
+        icon: "flex size-10 shrink-0 items-center justify-center rounded-xl bg-fill-tertiary text-muted-foreground [&_svg:not([class*='size-'])]:size-5",
       },
     },
     defaultVariants: {

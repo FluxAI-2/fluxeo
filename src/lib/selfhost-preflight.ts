@@ -14,7 +14,14 @@ type PreflightLevel = "ok" | "info" | "warn" | "fail";
 
 type PreflightItem = {
   // Stable identifier shared with /api/health's check map.
-  key: "auth" | "dataforseo" | "gsc" | "ai" | "rendering" | "runtime";
+  key:
+    | "auth"
+    | "dataforseo"
+    | "gsc"
+    | "ai"
+    | "rendering"
+    | "pagespeed"
+    | "runtime";
   name: string;
   level: PreflightLevel;
   message: string;
@@ -208,7 +215,7 @@ function checkOptionalFeatures(env: EnvRecord, items: PreflightItem[]): void {
           name: "AI features",
           level: "info",
           message:
-            "OPENROUTER_API_KEY not set (optional) — SAM, the in-app SEO agent, is disabled.",
+            "OPENROUTER_API_KEY not set (optional) — SAM, Prompt Explorer, and Claude and Perplexity tracking are disabled.",
         },
   );
 
@@ -226,6 +233,23 @@ function checkOptionalFeatures(env: EnvRecord, items: PreflightItem[]): void {
           level: "info",
           message:
             'CONTEXT_API_KEY not set (optional) — on Docker the site audit "Render JavaScript" option is disabled; on Cloudflare, Browser Run renders without a fallback.',
+        },
+  );
+
+  items.push(
+    get(env, "PAGESPEED_API_KEY")
+      ? {
+          key: "pagespeed",
+          name: "Lighthouse checks",
+          level: "ok",
+          message: "PAGESPEED_API_KEY set",
+        }
+      : {
+          key: "pagespeed",
+          name: "Lighthouse checks",
+          level: "warn",
+          message:
+            "PAGESPEED_API_KEY not set — site audit Lighthouse checks share PageSpeed Insights' keyless quota, which is often used up, so they fail. The key is free.",
         },
   );
 }

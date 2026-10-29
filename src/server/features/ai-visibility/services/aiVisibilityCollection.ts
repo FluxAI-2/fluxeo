@@ -6,8 +6,7 @@ import {
   type AiTrackingAnswer,
   type PostedAiTrackingTask,
 } from "@/server/lib/dataforseo";
-import { DataforseoChargedTaskError } from "@/server/lib/dataforseo/envelope";
-import { resolveLatestLlmModelName } from "@/server/lib/dataforseo/llm-models";
+import { resolveLatestLlmModelName } from "@/server/lib/llmResponseModels";
 import { AppError, asAppError } from "@/server/lib/errors";
 import type { ErrorCode } from "@/shared/error-codes";
 import { getIsoCountryCode } from "@/shared/keyword-locations";
@@ -282,10 +281,10 @@ export async function collectAiModelBatch(
           await saveAiAnswer(task.tag, parseLlmResponseAnswer(result), brands);
           return;
         } catch (cause) {
-          // A charged task error is a task DataForSEO returned with its cost.
+          // OpenRouter bills only completed answers, so an unavailable
+          // provider is free to ask again.
           if (
-            cause instanceof DataforseoChargedTaskError &&
-            cause.code === "UPSTREAM_UNAVAILABLE" &&
+            asAppError(cause)?.code === "UPSTREAM_UNAVAILABLE" &&
             attempt < AI_ANSWER_ATTEMPTS
           ) {
             await waitBeforeRetry();

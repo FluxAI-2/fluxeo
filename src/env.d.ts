@@ -85,8 +85,11 @@ declare namespace Cloudflare {
       }
     >;
 
-    // OpenRouter API key for the SAM in-app chat agent.
+    // OpenRouter API key for the SAM in-app chat agent and AI model answers.
     OPENROUTER_API_KEY?: string;
+    // Optional Google PageSpeed Insights key for site-audit Lighthouse checks;
+    // without it they run on a small shared quota.
+    PAGESPEED_API_KEY?: string;
     // Optional OpenRouter model slug override (defaults in openrouter.ts).
     OPENROUTER_MODEL?: string;
   }

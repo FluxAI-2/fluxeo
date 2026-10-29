@@ -19,7 +19,7 @@ export function GoogleOAuthSetupWarning({
       <AlertTitle>Google OAuth client not configured</AlertTitle>
       <AlertDescription>
         <p>
-          Add your Google client ID and secret to this OpenSEO deployment before
+          Add your Google client ID and secret to this Fluxeo deployment before
           connecting {integrationName}.
         </p>
         <SafeExternalLink

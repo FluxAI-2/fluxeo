@@ -35,7 +35,7 @@ vi.mock("@/server/billing/subscription", () => ({
 vi.mock("@/server/lib/dataforseo", () => ({
   createDataforseoClient: mocks.client,
 }));
-vi.mock("@/server/lib/dataforseo/llm-models", () => ({
+vi.mock("@/server/lib/llmResponseModels", () => ({
   resolveLatestLlmModelName: vi.fn(async () => "gpt-5.5"),
 }));
 vi.mock("@/server/lib/r2-cache", () => ({

@@ -36,17 +36,18 @@ import {
   postRankCheckTasks,
   SERP_ANALYSIS_DEPTH,
 } from "@/server/lib/dataforseo/serp";
-import { fetchLighthouseResult } from "@/server/lib/dataforseo/lighthouse";
 import {
   fetchLlmAggregatedMetrics,
   fetchLlmCrossAggregatedMetrics,
   fetchLlmMentionsSearch,
-  fetchLlmResponse,
   fetchLlmTopPages,
-  LLM_RESPONSE_WEB_SEARCH_DEFAULT,
   resolveLlmMentionsLimit,
 } from "@/server/lib/dataforseo/ai";
-import type { LlmResponseModelSlug } from "@/server/lib/dataforseo/llm-models";
+import {
+  fetchLlmResponse,
+  LLM_RESPONSE_WEB_SEARCH_DEFAULT,
+  llmResponseUsd,
+} from "@/server/lib/llmResponses";
 import {
   fetchAiTrackingLiveAnswer,
   postAiTrackingTasks,
@@ -108,10 +109,6 @@ const EXTENDED_REVIEWS_PRIORITY_PER_20_USD = 0.01;
 const UPDATES_PRIORITY_TASK_USD = 0.003;
 const UPDATES_PRIORITY_PER_10_USD = 0.0015;
 
-// OnPage Lighthouse, live (dataforseo.com/pricing/on-page/lighthouse-api);
-// fixtures show $0.00425 billed.
-const LIGHTHOUSE_LIVE_USD = 0.005;
-
 // AI Optimization (dataforseo.com/pricing/ai-optimization/llm-mentions):
 // $0.1 per request + $0.001 per row on every llm_mentions endpoint.
 const LLM_MENTIONS_TASK_USD = 0.1;
@@ -119,30 +116,6 @@ const LLM_MENTIONS_ROW_USD = 0.001;
 // measured: the aggregate endpoints and top_pages return one result row, and
 // every observed call billed $0.101.
 const LLM_MENTIONS_ONE_ROW_USD = LLM_MENTIONS_TASK_USD + LLM_MENTIONS_ROW_USD;
-// measured, token-priced: $0.0006 + the model's own bill. Measured with a
-// long-answer prompt at the 4096-token output cap on the model Prompt Explorer
-// sends per slug, then padded ~1.25x without web search and ~1.3x with it,
-// where the searched pages add a variable input bill. Measured bills: gpt-5
-// $0.072 / $0.042, claude-sonnet-4-5 $0.142 / $0.062, gemini-2.5-pro
-// $0.085 / $0.042, sonar-reasoning-pro $0.028 (it always searches).
-const LLM_RESPONSE_USD: Record<
-  LlmResponseModelSlug,
-  { webSearch: number; noSearch: number }
-> = {
-  chat_gpt: { webSearch: 0.09, noSearch: 0.05 },
-  claude: { webSearch: 0.18, noSearch: 0.08 },
-  gemini: { webSearch: 0.11, noSearch: 0.05 },
-  perplexity: { webSearch: 0.04, noSearch: 0.04 },
-};
-
-/** Estimated USD for one live LLM response at the 4096-token output cap. */
-export function llmResponseUsd(
-  modelSlug: LlmResponseModelSlug,
-  webSearch: boolean,
-): number {
-  const price = LLM_RESPONSE_USD[modelSlug];
-  return webSearch ? price.webSearch : price.noSearch;
-}
 
 // SERP Google Maps and Local Finder, live. measured: Maps bills one request
 // through depth 100 ($0.002 at depth 20 and 100), and no caller asks for
@@ -287,9 +260,6 @@ export const dataforseoPricing = {
       labsUsd(input.limit),
     ),
   },
-  lighthouse: {
-    live: priced(fetchLighthouseResult, () => LIGHTHOUSE_LIVE_USD),
-  },
   aiSearch: {
     mentionsSearch: priced(
       fetchLlmMentionsSearch,
@@ -316,6 +286,7 @@ export const dataforseoPricing = {
       fetchAiTrackingLiveAnswer,
       () => AI_LIVE_RECORD_COST_USD,
     ),
+    // OpenRouter, not DataForSEO, but metered through the same credit seam.
     llmResponse: priced(fetchLlmResponse, (input) =>
       llmResponseUsd(
         input.modelSlug,

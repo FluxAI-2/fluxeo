@@ -48,7 +48,7 @@ function BetaNotice() {
         </Button>
       </div>
       <p className="mt-1.5 text-xs text-muted-foreground">
-        For more powerful AI workflows, use the OpenSEO MCP with your own agent
+        For more powerful AI workflows, use the Fluxeo MCP with your own agent
         like Claude Code or Hermes.
       </p>
       <Link

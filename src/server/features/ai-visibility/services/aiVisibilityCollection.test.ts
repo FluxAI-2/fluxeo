@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { aiObservations, projectCompetitors } from "@/db/schema";
-import { DataforseoChargedTaskError } from "@/server/lib/dataforseo/envelope";
 import { AppError } from "@/server/lib/errors";
 import { AiVisibilityRepository as repo } from "../repositories/AiVisibilityRepository";
 import {
@@ -42,7 +41,7 @@ vi.mock("@/server/lib/dataforseo", () => ({
   }),
   fetchAiTrackingTaskResult: dataforseo.fetchTaskResult,
 }));
-vi.mock("@/server/lib/dataforseo/llm-models", () => ({
+vi.mock("@/server/lib/llmResponseModels", () => ({
   resolveLatestLlmModelName: async () => "claude-sonnet-5",
 }));
 
@@ -287,17 +286,18 @@ describe("AI answer collection", () => {
     });
   });
 
-  it("asks a model answer again only when DataForSEO returned the failed task", async () => {
+  it("asks a model answer again only while the provider is unavailable", async () => {
     vi.useFakeTimers({ toFake: ["setTimeout"] });
     dataforseo.llmResponse.mockImplementation(
       async ({ userPrompt }: { userPrompt: string }) => {
         if (userPrompt === "Best rank tracker?")
-          throw new AppError("UPSTREAM_UNAVAILABLE", "DataForSEO HTTP 502");
-        throw new DataforseoChargedTaskError(
-          "Internal Server Error.",
-          { path: [], costUsd: 0 },
-          false,
+          throw new AppError(
+            "INTERNAL_ERROR",
+            "OpenRouter request failed (400)",
+          );
+        throw new AppError(
           "UPSTREAM_UNAVAILABLE",
+          "OpenRouter request failed (502)",
         );
       },
     );
@@ -319,7 +319,7 @@ describe("AI answer collection", () => {
     });
     expect(await repo.getObservation("answer-1")).toMatchObject({
       status: "failed",
-      error: "UPSTREAM_UNAVAILABLE",
+      error: "INTERNAL_ERROR",
     });
   });
 

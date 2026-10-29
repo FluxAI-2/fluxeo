@@ -50,6 +50,7 @@ import { Route as AppPProjectIdBacklinksRouteImport } from './routes/_app/p/$pro
 import { Route as AppPProjectIdBrandLookupRouteImport } from './routes/_app/p/$projectId/brand-lookup'
 import { Route as AppPProjectIdContextRouteImport } from './routes/_app/p/$projectId/context'
 import { Route as AppPProjectIdDomainRouteImport } from './routes/_app/p/$projectId/domain'
+import { Route as AppPProjectIdGeoReadinessRouteImport } from './routes/_app/p/$projectId/geo-readiness'
 import { Route as AppPProjectIdKeywordsRouteImport } from './routes/_app/p/$projectId/keywords'
 import { Route as AppPProjectIdPromptExplorerRouteImport } from './routes/_app/p/$projectId/prompt-explorer'
 import { Route as AppPProjectIdRankTrackingRouteImport } from './routes/_app/p/$projectId/rank-tracking'
@@ -280,6 +281,12 @@ const AppPProjectIdDomainRoute = AppPProjectIdDomainRouteImport.update({
   path: '/domain',
   getParentRoute: () => AppPProjectIdRouteRoute,
 } as any)
+const AppPProjectIdGeoReadinessRoute =
+  AppPProjectIdGeoReadinessRouteImport.update({
+    id: '/geo-readiness',
+    path: '/geo-readiness',
+    getParentRoute: () => AppPProjectIdRouteRoute,
+  } as any)
 const AppPProjectIdKeywordsRoute = AppPProjectIdKeywordsRouteImport.update({
   id: '/keywords',
   path: '/keywords',
@@ -444,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/p/$projectId/brand-lookup': typeof AppPProjectIdBrandLookupRoute
   '/p/$projectId/context': typeof AppPProjectIdContextRoute
   '/p/$projectId/domain': typeof AppPProjectIdDomainRoute
+  '/p/$projectId/geo-readiness': typeof AppPProjectIdGeoReadinessRoute
   '/p/$projectId/keywords': typeof AppPProjectIdKeywordsRoute
   '/p/$projectId/prompt-explorer': typeof AppPProjectIdPromptExplorerRoute
   '/p/$projectId/rank-tracking': typeof AppPProjectIdRankTrackingRouteWithChildren
@@ -503,6 +511,7 @@ export interface FileRoutesByTo {
   '/p/$projectId/brand-lookup': typeof AppPProjectIdBrandLookupRoute
   '/p/$projectId/context': typeof AppPProjectIdContextRoute
   '/p/$projectId/domain': typeof AppPProjectIdDomainRoute
+  '/p/$projectId/geo-readiness': typeof AppPProjectIdGeoReadinessRoute
   '/p/$projectId/keywords': typeof AppPProjectIdKeywordsRoute
   '/p/$projectId/prompt-explorer': typeof AppPProjectIdPromptExplorerRoute
   '/p/$projectId/sam': typeof AppPProjectIdSamRoute
@@ -567,6 +576,7 @@ export interface FileRoutesById {
   '/_app/p/$projectId/brand-lookup': typeof AppPProjectIdBrandLookupRoute
   '/_app/p/$projectId/context': typeof AppPProjectIdContextRoute
   '/_app/p/$projectId/domain': typeof AppPProjectIdDomainRoute
+  '/_app/p/$projectId/geo-readiness': typeof AppPProjectIdGeoReadinessRoute
   '/_app/p/$projectId/keywords': typeof AppPProjectIdKeywordsRoute
   '/_app/p/$projectId/prompt-explorer': typeof AppPProjectIdPromptExplorerRoute
   '/_app/p/$projectId/rank-tracking': typeof AppPProjectIdRankTrackingRouteWithChildren
@@ -631,6 +641,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/brand-lookup'
     | '/p/$projectId/context'
     | '/p/$projectId/domain'
+    | '/p/$projectId/geo-readiness'
     | '/p/$projectId/keywords'
     | '/p/$projectId/prompt-explorer'
     | '/p/$projectId/rank-tracking'
@@ -690,6 +701,7 @@ export interface FileRouteTypes {
     | '/p/$projectId/brand-lookup'
     | '/p/$projectId/context'
     | '/p/$projectId/domain'
+    | '/p/$projectId/geo-readiness'
     | '/p/$projectId/keywords'
     | '/p/$projectId/prompt-explorer'
     | '/p/$projectId/sam'
@@ -753,6 +765,7 @@ export interface FileRouteTypes {
     | '/_app/p/$projectId/brand-lookup'
     | '/_app/p/$projectId/context'
     | '/_app/p/$projectId/domain'
+    | '/_app/p/$projectId/geo-readiness'
     | '/_app/p/$projectId/keywords'
     | '/_app/p/$projectId/prompt-explorer'
     | '/_app/p/$projectId/rank-tracking'
@@ -1089,6 +1102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPProjectIdDomainRouteImport
       parentRoute: typeof AppPProjectIdRouteRoute
     }
+    '/_app/p/$projectId/geo-readiness': {
+      id: '/_app/p/$projectId/geo-readiness'
+      path: '/geo-readiness'
+      fullPath: '/p/$projectId/geo-readiness'
+      preLoaderRoute: typeof AppPProjectIdGeoReadinessRouteImport
+      parentRoute: typeof AppPProjectIdRouteRoute
+    }
     '/_app/p/$projectId/keywords': {
       id: '/_app/p/$projectId/keywords'
       path: '/keywords'
@@ -1321,6 +1341,7 @@ interface AppPProjectIdRouteRouteChildren {
   AppPProjectIdBrandLookupRoute: typeof AppPProjectIdBrandLookupRoute
   AppPProjectIdContextRoute: typeof AppPProjectIdContextRoute
   AppPProjectIdDomainRoute: typeof AppPProjectIdDomainRoute
+  AppPProjectIdGeoReadinessRoute: typeof AppPProjectIdGeoReadinessRoute
   AppPProjectIdKeywordsRoute: typeof AppPProjectIdKeywordsRoute
   AppPProjectIdPromptExplorerRoute: typeof AppPProjectIdPromptExplorerRoute
   AppPProjectIdRankTrackingRoute: typeof AppPProjectIdRankTrackingRouteWithChildren
@@ -1342,6 +1363,7 @@ const AppPProjectIdRouteRouteChildren: AppPProjectIdRouteRouteChildren = {
   AppPProjectIdBrandLookupRoute: AppPProjectIdBrandLookupRoute,
   AppPProjectIdContextRoute: AppPProjectIdContextRoute,
   AppPProjectIdDomainRoute: AppPProjectIdDomainRoute,
+  AppPProjectIdGeoReadinessRoute: AppPProjectIdGeoReadinessRoute,
   AppPProjectIdKeywordsRoute: AppPProjectIdKeywordsRoute,
   AppPProjectIdPromptExplorerRoute: AppPProjectIdPromptExplorerRoute,
   AppPProjectIdRankTrackingRoute: AppPProjectIdRankTrackingRouteWithChildren,

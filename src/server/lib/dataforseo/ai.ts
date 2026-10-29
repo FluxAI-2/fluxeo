@@ -1,24 +1,17 @@
 import { z } from "zod";
-import { supportsWebSearchCountry } from "@/shared/prompt-search-countries";
 import {
   llmAggregatedTotalSchema,
   llmCrossAggregatedItemSchema,
   llmMentionItemSchema,
-  llmResponseResultSchema,
   llmTopPagesItemSchema,
   type LlmAggregatedTotal,
   type LlmCrossAggregatedItem,
   type LlmMentionItem,
-  type LlmResponseResult,
   type LlmTopPagesItem,
 } from "@/server/lib/dataforseoLlmSchemas";
 import { createDataforseoBillingClassifier } from "@/server/lib/dataforseoBillingClassification";
 import { AppError } from "@/server/lib/errors";
 import { dataforseoPost } from "@/server/lib/dataforseo/core";
-import {
-  isKnownLlmModelName,
-  type LlmResponseModelSlug,
-} from "@/server/lib/dataforseo/llm-models";
 import type { LlmPlatform, LlmTarget } from "@/server/lib/dataforseo/shared";
 import {
   assertOk,
@@ -42,12 +35,11 @@ function clampLimit(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, Math.floor(value)));
 }
 
-// Request defaults shared with pricing.ts, whose estimates must reserve for
+// Request default shared with pricing.ts, whose estimate must reserve for
 // what this module actually sends.
 export function resolveLlmMentionsLimit(limit?: number): number {
   return clampLimit(limit ?? 100, 1, 1000);
 }
-export const LLM_RESPONSE_WEB_SEARCH_DEFAULT = true;
 
 function targetList(target: LlmTarget): LlmTarget[] {
   return [target];
@@ -254,96 +246,4 @@ export async function fetchLlmCrossAggregatedMetrics(
     );
   }
   return { data: items.data, billing: buildTaskBilling(task) };
-}
-
-// ---------------------------------------------------------------------------
-// LLM Responses (per-model)
-// ---------------------------------------------------------------------------
-
-type LlmResponsesInput = {
-  userPrompt: string;
-  modelSlug: LlmResponseModelSlug;
-  modelName: string;
-  webSearch?: boolean;
-  maxOutputTokens?: number;
-  /** Two-letter ISO country code used to geolocate the web-search component. */
-  webSearchCountryCode?: string;
-};
-
-type LlmResponseRequestFields = {
-  user_prompt: string;
-  model_name: string;
-  web_search: boolean;
-  force_web_search?: boolean;
-  max_output_tokens: number;
-  web_search_country_iso_code?: string;
-};
-
-export async function fetchLlmResponse(
-  input: LlmResponsesInput,
-): Promise<DataforseoApiResponse<LlmResponseResult>> {
-  // Fail fast on an unknown model_name: DataForSEO charges for tasks that fail
-  // with `Invalid Field: 'model_name'`, so we must never dispatch one. The
-  // check runs against the live (cached, free) model catalog so newly released
-  // models work without a code change.
-  if (!(await isKnownLlmModelName(input.modelSlug, input.modelName))) {
-    throw new AppError(
-      "VALIDATION_ERROR",
-      `Unsupported DataForSEO model_name "${input.modelName}" for ${input.modelSlug}`,
-    );
-  }
-
-  // `web_search: true` is permission, not an instruction — models regularly
-  // answer from parametric memory (observed ~40% search rate for gpt-5) and
-  // then return no citations. Claude accepts `force_web_search` to make the
-  // search actually happen; every ChatGPT model rejects it with 40501
-  // "this model does not support 'force_web_search'" (verified 2026-08-25),
-  // and Gemini/Perplexity don't document it, so only Claude gets the field.
-  const webSearch = input.webSearch ?? LLM_RESPONSE_WEB_SEARCH_DEFAULT;
-  if (
-    webSearch &&
-    input.webSearchCountryCode &&
-    !supportsWebSearchCountry(input.modelSlug, input.webSearchCountryCode)
-  ) {
-    throw new AppError(
-      "VALIDATION_ERROR",
-      `Unsupported web-search country ${input.webSearchCountryCode} for ${input.modelSlug}`,
-    );
-  }
-  // The country only geolocates the search: every model rejects it with 40501
-  // "you must enable 'web_search'" when search is off (verified 2026-09-30).
-  // DataForSEO's Gemini endpoint rejects it with a 40501 "Invalid Field" error.
-  const fields: LlmResponseRequestFields = {
-    user_prompt: input.userPrompt,
-    model_name: input.modelName,
-    web_search: webSearch,
-    ...(webSearch && input.modelSlug === "claude"
-      ? { force_web_search: true }
-      : {}),
-    max_output_tokens: clampLimit(input.maxOutputTokens ?? 1024, 256, 4096),
-    ...(webSearch && input.webSearchCountryCode
-      ? { web_search_country_iso_code: input.webSearchCountryCode }
-      : {}),
-  };
-
-  const response = await dataforseoPost(
-    `/v3/ai_optimization/${input.modelSlug}/llm_responses/live`,
-    [fields],
-    // A billed live call must never be replayed on an ambiguous 5xx.
-    { classify: classifyAiSearchError, maxServerErrorRetries: 0 },
-  );
-
-  const task = assertOk(
-    response,
-    assertOptions(`/v3/ai_optimization/${input.modelSlug}/llm_responses/live`),
-  );
-
-  const result = llmResponseResultSchema.safeParse(firstResult(task) ?? {});
-  if (!result.success) {
-    throw new AppError(
-      "INTERNAL_ERROR",
-      "DataForSEO llm_responses returned an invalid response shape",
-    );
-  }
-  return { data: result.data, billing: buildTaskBilling(task) };
 }

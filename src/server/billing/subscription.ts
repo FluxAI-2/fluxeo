@@ -503,7 +503,8 @@ export async function settleUsageCredits(args: {
 
   const { landed, error } = await finalizeHold(hold, actualCredits, {
     creditFeature,
-    provider: "dataforseo",
+    // A hold covers one seam call, so its paths share one provider.
+    provider: costs[0]?.path[0] === "openrouter" ? "openrouter" : "dataforseo",
     paths,
     totalCostUsd,
     estimatedCredits: hold.estimatedCredits,

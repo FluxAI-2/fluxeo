@@ -44,15 +44,6 @@ describe("dataforseoPricing", () => {
       credits: 23,
     },
     {
-      name: "Lighthouse run",
-      estimateUsd: dataforseoPricing.lighthouse.live({
-        url: "https://example.com",
-        strategy: "mobile",
-      }),
-      rawUsd: 0.005,
-      credits: 7,
-    },
-    {
       name: "backlinks history over one year",
       estimateUsd: dataforseoPricing.backlinks.history({
         target: "example.com",
@@ -128,16 +119,6 @@ describe("dataforseoPricing", () => {
         depth: 20,
       }),
       billedUsd: 0.0024,
-    },
-    {
-      name: "Claude response with web search",
-      estimateUsd: dataforseoPricing.aiSearch.llmResponse({
-        userPrompt: "x",
-        modelSlug: "claude",
-        modelName: "claude-sonnet-4-5",
-        webSearch: true,
-      }),
-      billedUsd: 0.142357,
     },
   ])(
     "holds at least the measured bill: $name",

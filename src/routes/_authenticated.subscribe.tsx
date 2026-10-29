@@ -201,16 +201,16 @@ function SubscribePage() {
 
       <div className="space-y-3 text-center">
         <img
-          src="/transparent-logo.png"
-          alt="OpenSEO"
+          src="/fluxeo-mark.svg"
+          alt="Fluxeo"
           className="mx-auto size-10 rounded-lg"
         />
         <h1 className="text-xl font-semibold">
           {isUpgradeFlow
             ? "Upgrade your plan"
             : firstName
-              ? `Welcome to OpenSEO, ${firstName}!`
-              : "Welcome to OpenSEO!"}
+              ? `Welcome to Fluxeo, ${firstName}!`
+              : "Welcome to Fluxeo!"}
         </h1>
         <p className="text-sm text-muted-foreground">
           SEO on your terms. All your SEO tools in one place at a fair price.

@@ -19,7 +19,7 @@ export const Route = createFileRoute("/_authenticated/oauth-consent")({
 const SCOPES = [
   {
     icon: Database,
-    label: "Read your OpenSEO data",
+    label: "Read your Fluxeo data",
     description: "Projects, keyword reports, and audit results.",
   },
   {
@@ -72,7 +72,7 @@ function OAuthConsentPage() {
         setError("Authorization response did not include a redirect URL.");
       }
     } catch {
-      setError("We couldn't reach OpenSEO. Please try again.");
+      setError("We couldn't reach Fluxeo. Please try again.");
     }
     setPendingAction(null);
   }
@@ -81,15 +81,15 @@ function OAuthConsentPage() {
     <Card className="w-full max-w-md">
       <CardHeader className="flex flex-col items-center text-center">
         <img
-          src="/transparent-logo.png"
-          alt="OpenSEO"
+          src="/fluxeo-mark.svg"
+          alt="Fluxeo"
           className="size-10 rounded-lg"
         />
         <CardTitle className="mt-5 text-xl">
           <h1>Authorize MCP access</h1>
         </CardTitle>
         <p className="mt-2 text-sm text-muted-foreground">
-          An MCP client is requesting access to your OpenSEO workspace.
+          An MCP client is requesting access to your Fluxeo workspace.
         </p>
       </CardHeader>
       <CardContent>
